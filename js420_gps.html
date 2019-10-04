@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		#mapa {
+			width: 800px;
+			height: 600px;
+		}
+
+	</style>
+	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBF8VSFtSdcuA3dnv5qcOQB7naP57SCDdc"></script>
+	<script type="text/javascript">
+		
+		if(navigator.geolocation){
+			navigator.geolocation.getCurrentPosition(function(position){
+				var latitud = position.coords.latitude;
+				var longitud = position.coords.longitude;
+				var altitud = position.coords.altitude;
+				//alert(' latitud: ' + latitud + ' longitud: ' + longitud + ' altitud: ' + altitud);
+				mostrarMapa(latitud, longitud);
+			}); //cierra funcion navigator
+		} //cierra If
+
+		function mostrarMapa (latitud,longitud) {
+			//alert ('mostrarMapa')
+			var opcionesMapa = {
+				center: new google.maps.LatLng(latitud, longitud),
+				zoom:15,
+				mapTypeId: google.maps.MapTypeId.HYBRID //TERRAIN
+
+			}   //OBJETO JS
+			//añadir un marcador en el mapa   --> marcar una posición en el mapa con un gráfico
+			var map = new google.maps.Map(document.getElementById('mapa'),opcionesMapa);
+			var latlngmarks = new google.maps.LatLng(latitud,longitud);
+			var mapMarker = new google.maps.Marker({
+				position:latlngmarks,
+				title:"Estás aquí.",
+			});
+			mapMarker.setMap(map);
+
+			var goldStar={
+							path: "M125,5155,90245,90175,145200,230125,18050,23075,1455,9095,90z",
+							fillColor: "yellow",
+							fillOpacity: 0.8,
+							scale: 0.15,
+							strokeColor: "gold",
+							strokeWeight: 1
+				};
+		/*
+			//personaliza el icono 
+			var mapMarker = new google.maps.Marker({
+					position: latlngmarks,
+					title: "Estás aquí.",
+					icon: pvblivs,
+				});*/
+
+				//añade una ventanad etexto al marker
+			var infoWindowOpts = {content:"<img src='img/0.png'/>"};
+			var infoWindow = new google.maps.InfoWindow(infoWindowOpts);
+				google.maps.event.addListener(mapMarker,'click',function(){
+				infoWindow.open(map,mapMarker);
+				});
+
+		
+
+		}
+
+	</script>
+</head>
+<body>
+	<div id="mapa"></div>
+</body>
+</html>
